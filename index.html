@@ -16,19 +16,21 @@
     </div>
     <div class="card">
       <div class="section">
-        <div class="pageviewsInfo"> <span>100</span>K PAGEVIEWS</div>
+        <div class="pageViewsInfo"> <span id="pageViews">150</span>K PAGEVIEWS</div>
         <div class="pricePerMonth">
-          <div class="priceAmount">$16.00</div>
+          <div class="priceAmount">$ <span id="priceAmount">15.00</span></div>
           <div> / month</div>
         </div>
       </div>
-      <div class="slidecontainer">
-        <input type="range" min="50" max="150" step="5" value="100" class="slider">
+      <div class="slideContainer">
+        <div class="progress" id="progress"></div>
+        <div class="track"></div>
+        <input type="range" min="50" max="250" value="150" step="10" class="slider" id="slider" onmousemove="updateUI.onChangeSliderValue()" onclick="updateUI.onChangeSliderValue()">
       </div>
       <div class="section subscriptionType">
         <div class="monthlyBilling">Monthly Billing</div>
         <label class="switch">
-          <input type="checkbox">
+          <input id="checkbox" type="checkbox" onclick="updateUI.onClickCheckbox()">
           <span class="slider round"></span>
         </label>
         <div class="yearlyBilling">
@@ -48,7 +50,6 @@
       </div>
     </div>
   </div>
-  
-
+  <script src="script.js"></script>
 </body>
 </html>
