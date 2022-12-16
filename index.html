@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
   <link rel="stylesheet" href="style.css" />
   <title>Frontend Mentor | Interactive pricing component</title>
 </head>
@@ -16,22 +14,21 @@
     </div>
     <div class="card">
       <div class="section">
-        <div class="pageViewsInfo"> <span id="pageViews">150</span>K PAGEVIEWS</div>
+        <div class="pageViewsInfo"> <span id="pageViews">10</span>K PAGEVIEWS</div>
         <div class="pricePerMonth">
-          <div class="priceAmount">$ <span id="priceAmount">15.00</span></div>
+          <div class="priceAmount">$ <span id="priceAmount">0.56</span></div>
           <div> / month</div>
         </div>
       </div>
-      <div class="slideContainer" id="slideContainer">
+      <div class="slideContainer" id="slideContainer" >
         <div class="progress" id="progress"></div>
-        <div class="track"></div>
+        <div class="track" id="track"></div>
         <div class="slider-thumb"  id="slider-thumb"></div>
-<!--        <input type="range" min="50" max="250" value="150" step="10" class="slider" id="slider" onmousemove="updateUI.onChangeSliderValue()" onclick="updateUI.onChangeSliderValue()">-->
       </div>
       <div class="section subscriptionType">
         <div class="monthlyBilling">Monthly Billing</div>
         <label class="switch">
-          <input id="checkbox" type="checkbox" onclick="updateUI.onClickCheckbox()">
+          <input id="checkbox" type="checkbox" onclick="mousePositionHandler.onClickCheckbox()">
           <span class="slider round"></span>
         </label>
         <div class="yearlyBilling">

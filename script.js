@@ -20,9 +20,6 @@ class UpdateUI {
         this.slider = document.getElementById("slideContainer");
         this.checkbox = document.getElementById("checkbox");
         this.priceAmount = document.getElementById("priceAmount");
-        this.progressBar = document.getElementById("progress");
-        this.sliderThumb = document.getElementById("slider-thumb");
-
         this.isLeftButtonMouseDown = false;
         this.handleOnMouseDown = handleOnMouseDown;
         this.element = element;
@@ -54,35 +51,19 @@ class UpdateUI {
             const { clientX, clientY } = e;
 
             if (this.isLeftButtonMouseDown || !this.handleOnMouseDown) {
-
                 callback(clientX, clientY);
             }
         });
     }
 
-    normalizePosition(x, y) {
+    normalizePosition(x, y, xMax) {
         const bbox = this.slider.getBoundingClientRect();
 
         return {
             x: x - bbox.left,
-            y: y - bbox.top
+            y: y - bbox.top,
+            xMax: window.screen.width - bbox.left - bbox.width,
         };
-    }
-
-    onChangeSliderValue(e) {
-        // this.sliderValue = this.slider.value;
-        // this.pageViews.innerHTML = this.sliderValue;
-        // this.priceAmount.innerHTML = this.calculatePrice.calculatePrice(this.sliderValue);
-        //
-        // let progressBarValue = (this.slider.value/10 - 5)/2 * 10;
-        // this.progressBar.style.width = progressBarValue + '%'
-
-        // this.sliderThumb.style.top =  + 'px';
-        // this.sliderThumb.style.left = e.clientY + 'px';
-
-        if(this.checkbox.checked) {
-            this.onClickCheckbox();
-        }
     }
 
     onClickCheckbox() {
@@ -103,48 +84,20 @@ const mousePositionHandler = new UpdateUI(
     calculatePrice
 );
 
-mousePositionHandler.onMouseMove((x, y) => {
-    const { x: normX, y: normY } = mousePositionHandler.normalizePosition(x, y);
+mousePositionHandler.onMouseMove((x, y, xMax) => {
+    const { x: normX, y: normY, xMax: maxX } = mousePositionHandler.normalizePosition(x, y, xMax);
+    const posX = Math.max(Math.min(normX, 560), 0);
 
-    console.log(normX, normY)
+    if(posX % 10 == 0) {
+        document.getElementById("slider-thumb").style.left = posX - 25 + 'px';
+        document.getElementById("progress").style.width = posX + 560 / 100 + 'px'; // 560 - xMax
 
-    const posX = Math.max(Math.min(normX, 567), 0);
+        let pageViews = posX + 560 / 100 - 5.6 + 10;
+        mousePositionHandler.pageViews.innerHTML = pageViews.toFixed();
+        mousePositionHandler.priceAmount.innerHTML = mousePositionHandler.calculatePrice.calculatePrice((posX + 560 / 100).toString());
 
-    console.log(posX)
-
-    if (posX % 10 == 0)
-    document.getElementById("slider-thumb").style.left = posX - 25 + 'px';
+        if(mousePositionHandler.checkbox.checked) {
+            mousePositionHandler.onClickCheckbox();
+        }
+    }
 });
-//
-// let div = document.getElementById("slider-thumb");
-// let container = document.getElementById("slideContainer");
-// let mousePosition;
-// let isDown = false;
-// let offset = 25;
-//
-// container.addEventListener('click', function(event) {
-//     event.preventDefault();
-//     let clientRect = container.getBoundingClientRect();
-//
-//     if (event.clientX <= 825) {
-//         mousePosition = event.clientX;
-//         div.style.left = (mousePosition  - clientRect.left - offset) + 'px';
-//     }
-// }, true);
-//
-// div.addEventListener('mousedown', function(event) {
-//     isDown = true;
-// })
-//
-// div.addEventListener('mouseup', function(event) {
-//     isDown = false;
-// })
-// div.addEventListener('mousemove', function(event) {
-//     event.preventDefault();
-//     let clientRect = container.getBoundingClientRect();
-//
-//     if (event.clientX <= 825 && isDown) {
-//         mousePosition = event.clientX;
-//         div.style.left = (mousePosition  - clientRect.left - offset) + 'px';
-//     }
-// }, true);
