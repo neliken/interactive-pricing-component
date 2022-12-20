@@ -1,6 +1,32 @@
+const data = [
+    {
+        views: "10K",
+        price: 8
+    },
+    {
+        views: "50K",
+        price: 12
+    },
+    {
+        views: "100K",
+        price: 16
+    },
+    {
+        views: "500K",
+        price: 24
+    },
+    {
+        views: "1M",
+        price: 36
+    }
+]
 class CalculatePrice{
-    calculatePrice(pageViews) {
-        return (pageViews / 10).toFixed(2);
+    calculatePageViews(position) {
+        return data[position].views;
+    }
+
+    calculatePrice(position) {
+        return data[position].price.toFixed(2);
     }
     calculateYearlyPayment(monthlyPrice) {
         return ((monthlyPrice * 12) * 75 / 100).toFixed(2);
@@ -84,18 +110,46 @@ const mousePositionHandler = new UpdateUI(
     calculatePrice
 );
 
+
+function createData(steps, max) {
+    const arr = [];
+    const unit = max / steps;
+
+    for (let i = 0; i < steps + 1; i++) {
+        arr.push(unit * i);
+    }
+
+    return arr;
+}
+
+let arr = createData(4, 560);
+
+function findInRange(values, valueToFind) {
+
+    for (let i = 0; i < values.length-1; i++) {
+        if (valueToFind >= values[i] && valueToFind <= values[i+1]) {
+            if(valueToFind == values[i+1]) {
+                return i+1;
+            }
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 mousePositionHandler.onMouseMove((x, y, xMax) => {
     const { x: normX, y: normY, xMax: maxX } = mousePositionHandler.normalizePosition(x, y, xMax);
     const posX = Math.max(Math.min(normX, 560), 0);
 
-    if(posX % 10 == 0) {
-        document.getElementById("slider-thumb").style.left = posX - 25 + 'px';
-        document.getElementById("progress").style.width = posX + 560 / 100 + 'px'; // 560 - xMax
+    document.getElementById("slider-thumb").style.left = posX - 25 + 'px';
+    document.getElementById("progress").style.width = posX + 560 / 100 + 'px'; // 560 - xMax
 
-        let pageViews = posX + 560 / 100 - 5.6 + 10;
-        mousePositionHandler.pageViews.innerHTML = pageViews.toFixed();
-        mousePositionHandler.priceAmount.innerHTML = mousePositionHandler.calculatePrice.calculatePrice((posX + 560 / 100).toString());
-
+    let step = findInRange(arr, posX);
+    if(arr[step] <= posX) {
+        mousePositionHandler.pageViews.innerHTML = mousePositionHandler.calculatePrice.calculatePageViews(step);
+        mousePositionHandler.priceAmount.innerHTML = mousePositionHandler.calculatePrice.calculatePrice(step);
+    
         if(mousePositionHandler.checkbox.checked) {
             mousePositionHandler.onClickCheckbox();
         }
